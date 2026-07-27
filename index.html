@@ -1,0 +1,65 @@
+// 1. TENTUKAN SUBJEK & KRITERIA DI SINI
+const SUBJECT_SETTINGS = {
+    "MPU3221": {
+        name: "Pengurusan Persatuan",
+        config: [
+            {
+                id: 'hp1', title: 'Tugasan 1: Asas & Operasi (HP1)', max: 30, color: '#1e3a8a', prefix: 'r',
+                items: [
+                    {no:1, nama:"Pengenalan & Rasional", max:5},
+                    {no:2, nama:"Logo & Moto", max:5},
+                    {no:3, nama:"Perlembagaan", max:10},
+                    {no:4, nama:"Takwim", max:10}
+                ]
+            },
+            {
+                id: 'hp5', title: 'Tugasan 1: Komunikasi (HP5)', max: 10, color: '#0369a1', prefix: 'g',
+                items: [{no:1, nama:"Tatabahasa & Format", max:10}]
+            }
+        ]
+    },
+    "GKK1043": {
+        name: "Kesihatan Diri & Kecergasan",
+        config: [
+            {
+                id: 'hp1', title: 'Tugasan 1: Amalan Sihat (HP1)', max: 40, color: '#15803d', prefix: 'r',
+                items: [
+                    {no:1, nama:"Analisis BMI", max:20},
+                    {no:2, nama:"Pelan Pemakanan", max:20}
+                ]
+            }
+        ]
+    }
+};
+
+let currentKodKursus = "";
+let currentRubrikConfig = [];
+
+// 2. KEMASKINI FUNGSI LOGIN
+async function handleAuth() {
+    const id = document.getElementById('idIn').value.trim();
+    const pw = document.getElementById('pwIn').value;
+    const kod = document.getElementById('subjectSelect').value; // Ambil dari dropdown
+    
+    currentKodKursus = kod;
+    currentRubrikConfig = SUBJECT_SETTINGS[kod].config;
+
+    if (!id) return showToast('Masukkan ID!', 'err');
+    
+    // FETCH API dengan tambahan parameter &kodKursus=
+    const apiURL = `${API}?action=${mode === 'student' ? 'checkLogin' : 'lecturerLogin'}&noKP=${id}&kodKursus=${kod}&email=${id}&pass=${pw}`;
+    
+    // ... (Logik fetch seterusnya sama seperti asal)
+}
+
+// 3. TAMBAH DROPDOWN PADA LOGIN SCREEN (HTML)
+/* Masukkan ini dalam login card sebelum input ID: */
+/*
+<div class="mb-4">
+    <label class="dim-label">Pilih Mata Pelajaran</label>
+    <select id="subjectSelect" class="w-full p-3 rounded-lg border-2 border-blue-100 font-bold bg-blue-50 text-blue-900">
+        <option value="MPU3221">MPU3221 - Pengurusan Persatuan</option>
+        <option value="GKK1043">GKK1043 - Kesihatan Diri</option>
+    </select>
+</div>
+*/
