@@ -1,54 +1,17 @@
-// 1. PENGATURAN SUBJEK (Boleh tambah subjek baru di sini)
-const SUBJECT_MAP = {
-    "MPU3221": {
-        full_name: "Pengurusan Persatuan",
-        rubrics: [
-            {
-                id: 'hp1', title: 'Tugasan 1: Asas & Operasi (HP1)', max: 30, color: '#1e3a8a', prefix: 'r',
-                items: [
-                    {no:1, nama:"Pengenalan & Rasional", max:5, penerangan: "Huraian tujuan penubuhan"},
-                    {no:2, nama:"Logo & Moto", max:5, penerangan: "Kreativiti dan huraian makna"},
-                    {no:3, nama:"Struktur Jawatankuasa", max:10, penerangan: "Carta organisasi lengkap"},
-                    {no:4, nama:"Takwim Tahunan", max:10, penerangan: "Perancangan aktiviti berkala"}
-                ]
-            },
-            {
-                id: 'hp5', title: 'Tugasan 1: Komunikasi (HP5)', max: 10, color: '#0369a1', prefix: 'g',
-                items: [{no:1, nama:"Format & Laras Bahasa", max:10, penerangan: "Penulisan akademik yang tepat"}]
-            }
-        ]
-    },
-    "GKK1043": {
-        full_name: "Kesihatan Diri & Kecergasan",
-        rubrics: [
-            {
-                id: 'hp1', title: 'Tugasan 1: Gaya Hidup Sihat (HP1)', max: 40, color: '#15803d', prefix: 'r',
-                items: [
-                    {no:1, nama:"Pengurusan Berat Badan", max:20, penerangan: "Analisis komposisi badan"},
-                    {no:2, nama:"Pelan Senaman", max:20, penerangan: "Rutin aktiviti fizikal mingguan"}
-                ]
-            }
-        ]
-    }
-};
-
-let currentKodKursus = "MPU3221"; // Default
-let RUBRIK_CONFIG = SUBJECT_MAP[currentKodKursus].rubrics;
-
-// 2. KEMASKINI LOGIK LOGIN (handleAuth)
-async function handleAuth() {
-    const id = document.getElementById('idIn').value.trim();
-    const pw = document.getElementById('pwIn').value;
-    const kod = document.getElementById('subjectSelect').value; // Ambil dari dropdown
-    
-    currentKodKursus = kod;
-    RUBRIK_CONFIG = SUBJECT_MAP[kod].rubrics; // Tukar rubrik secara dinamik
-
-    if (!id) return showToast('Sila masukkan ID!', 'err');
-    
-    const apiURL = `${API}?action=${mode === 'student' ? 'checkLogin' : 'lecturerLogin'}&noKP=${id}&kodKursus=${kod}&email=${id}&pass=${pw}`;
-    
-    // FETCH DATA...
-    // Apabila berjaya login, pastikan simpan kod kursus dalam localStorage
-    localStorage.setItem('currentKodKursus', kod);
-}
+<div id="setupModal" style="display:none;" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999]">
+    <div class="academic-card p-8 w-full max-w-md">
+        <h2 class="font-serif-title text-xl font-bold mb-4">Sistem Konfigurasi Master</h2>
+        <p class="text-sm text-gray-600 mb-4">Masukkan URL Google Sheet baru dan ID Folder Drive untuk memulakan sistem.</p>
+        
+        <label class="dim-label">Google Sheet URL</label>
+        <input type="text" id="ssUrl" placeholder="https://docs.google.com/spreadsheets/d/..." class="w-full mb-4">
+        
+        <label class="dim-label">Google Drive Folder ID (Untuk Gambar)</label>
+        <input type="text" id="folderId" placeholder="1BiYC-1CuGn1c_4..." class="w-full mb-4">
+        
+        <button onclick="runMasterSetup()" id="setupBtn" class="btn-primary w-full py-3 rounded-lg">
+            Hubungkan & Jana Header
+        </button>
+        <button onclick="document.getElementById('setupModal').style.display='none'" class="w-full mt-2 text-xs text-gray-400">Batal</button>
+    </div>
+</div>
