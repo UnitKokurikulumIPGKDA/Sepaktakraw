@@ -1,65 +1,54 @@
-// 1. TENTUKAN SUBJEK & KRITERIA DI SINI
-const SUBJECT_SETTINGS = {
+// 1. PENGATURAN SUBJEK (Boleh tambah subjek baru di sini)
+const SUBJECT_MAP = {
     "MPU3221": {
-        name: "Pengurusan Persatuan",
-        config: [
+        full_name: "Pengurusan Persatuan",
+        rubrics: [
             {
                 id: 'hp1', title: 'Tugasan 1: Asas & Operasi (HP1)', max: 30, color: '#1e3a8a', prefix: 'r',
                 items: [
-                    {no:1, nama:"Pengenalan & Rasional", max:5},
-                    {no:2, nama:"Logo & Moto", max:5},
-                    {no:3, nama:"Perlembagaan", max:10},
-                    {no:4, nama:"Takwim", max:10}
+                    {no:1, nama:"Pengenalan & Rasional", max:5, penerangan: "Huraian tujuan penubuhan"},
+                    {no:2, nama:"Logo & Moto", max:5, penerangan: "Kreativiti dan huraian makna"},
+                    {no:3, nama:"Struktur Jawatankuasa", max:10, penerangan: "Carta organisasi lengkap"},
+                    {no:4, nama:"Takwim Tahunan", max:10, penerangan: "Perancangan aktiviti berkala"}
                 ]
             },
             {
                 id: 'hp5', title: 'Tugasan 1: Komunikasi (HP5)', max: 10, color: '#0369a1', prefix: 'g',
-                items: [{no:1, nama:"Tatabahasa & Format", max:10}]
+                items: [{no:1, nama:"Format & Laras Bahasa", max:10, penerangan: "Penulisan akademik yang tepat"}]
             }
         ]
     },
     "GKK1043": {
-        name: "Kesihatan Diri & Kecergasan",
-        config: [
+        full_name: "Kesihatan Diri & Kecergasan",
+        rubrics: [
             {
-                id: 'hp1', title: 'Tugasan 1: Amalan Sihat (HP1)', max: 40, color: '#15803d', prefix: 'r',
+                id: 'hp1', title: 'Tugasan 1: Gaya Hidup Sihat (HP1)', max: 40, color: '#15803d', prefix: 'r',
                 items: [
-                    {no:1, nama:"Analisis BMI", max:20},
-                    {no:2, nama:"Pelan Pemakanan", max:20}
+                    {no:1, nama:"Pengurusan Berat Badan", max:20, penerangan: "Analisis komposisi badan"},
+                    {no:2, nama:"Pelan Senaman", max:20, penerangan: "Rutin aktiviti fizikal mingguan"}
                 ]
             }
         ]
     }
 };
 
-let currentKodKursus = "";
-let currentRubrikConfig = [];
+let currentKodKursus = "MPU3221"; // Default
+let RUBRIK_CONFIG = SUBJECT_MAP[currentKodKursus].rubrics;
 
-// 2. KEMASKINI FUNGSI LOGIN
+// 2. KEMASKINI LOGIK LOGIN (handleAuth)
 async function handleAuth() {
     const id = document.getElementById('idIn').value.trim();
     const pw = document.getElementById('pwIn').value;
     const kod = document.getElementById('subjectSelect').value; // Ambil dari dropdown
     
     currentKodKursus = kod;
-    currentRubrikConfig = SUBJECT_SETTINGS[kod].config;
+    RUBRIK_CONFIG = SUBJECT_MAP[kod].rubrics; // Tukar rubrik secara dinamik
 
-    if (!id) return showToast('Masukkan ID!', 'err');
+    if (!id) return showToast('Sila masukkan ID!', 'err');
     
-    // FETCH API dengan tambahan parameter &kodKursus=
     const apiURL = `${API}?action=${mode === 'student' ? 'checkLogin' : 'lecturerLogin'}&noKP=${id}&kodKursus=${kod}&email=${id}&pass=${pw}`;
     
-    // ... (Logik fetch seterusnya sama seperti asal)
+    // FETCH DATA...
+    // Apabila berjaya login, pastikan simpan kod kursus dalam localStorage
+    localStorage.setItem('currentKodKursus', kod);
 }
-
-// 3. TAMBAH DROPDOWN PADA LOGIN SCREEN (HTML)
-/* Masukkan ini dalam login card sebelum input ID: */
-/*
-<div class="mb-4">
-    <label class="dim-label">Pilih Mata Pelajaran</label>
-    <select id="subjectSelect" class="w-full p-3 rounded-lg border-2 border-blue-100 font-bold bg-blue-50 text-blue-900">
-        <option value="MPU3221">MPU3221 - Pengurusan Persatuan</option>
-        <option value="GKK1043">GKK1043 - Kesihatan Diri</option>
-    </select>
-</div>
-*/
